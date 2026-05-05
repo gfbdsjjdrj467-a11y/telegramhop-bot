@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 API_TOKEN = '8785117470:AAFSIOYEFQ31pH8kzDQ9M7V4E9VzbRbysLo'
 
-bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
+bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode="MarkdownV2"))
 dp = Dispatcher()
 
 PHOTO_DIR = "photos"
@@ -55,10 +55,14 @@ BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
 
-# Премиум-эмодзи ID (актуальные)
-WELCOME_EMOJI_ID = "5465263910414195580"   # 💝
-STARS_EMOJI_ID = "5471952986970267163"     # 💎
-PAYMENT_EMOJI_ID = "5370900768796711127"   # 🍾
+# ID премиум-эмодзи (новые)
+WELCOME_EMOJI_ID = "5440431182602842059"      # 👋
+STARS_EMOJI_ID = "5348570868752595928"        # ⭐
+PAYMENT_EMOJI_ID = "5409048419211682843"      # 💵
+
+# Функция для вставки премиум-эмодзи в MarkdownV2
+def emoji(emoji_id, fallback=""):
+    return f'[😊](tg://emoji?id={emoji_id})'
 
 COUNTRIES = ["Индонезия", "Индия"]
 
@@ -176,7 +180,7 @@ def get_text(lang, key, **kwargs):
         text = text.format(**kwargs)
     return text
 
-async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=None):
+async def send_message_safe(message, text, photo_key, reply_markup, show_emoji=None):
     photo_path = get_setting(photo_key)
     
     try:
@@ -185,9 +189,13 @@ async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=Non
     except:
         pass
     
-    # Добавляем премиум-эмодзи если передан ID
-    if emoji_id:
-        final_text = f'<tg-emoji emoji-id="{emoji_id}"></tg-emoji> {text}'
+    # Добавляем премиум-эмодзи в начале (MarkdownV2)
+    if show_emoji == "welcome":
+        final_text = f'[😊](tg://emoji?id={WELCOME_EMOJI_ID}) {text}'
+    elif show_emoji == "stars":
+        final_text = f'[⭐](tg://emoji?id={STARS_EMOJI_ID}) {text}'
+    elif show_emoji == "payment":
+        final_text = f'[💵](tg://emoji?id={PAYMENT_EMOJI_ID}) {text}'
     else:
         final_text = text
     
@@ -198,13 +206,13 @@ async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=Non
                 photo=photo,
                 caption=final_text,
                 reply_markup=reply_markup,
-                parse_mode="HTML"
+                parse_mode="MarkdownV2"
             )
         except Exception as e:
             log.error(f"Ошибка фото: {e}")
-            await message.answer(final_text, reply_markup=reply_markup, parse_mode="HTML")
+            await message.answer(final_text, reply_markup=reply_markup, parse_mode="MarkdownV2")
     else:
-        await message.answer(final_text, reply_markup=reply_markup, parse_mode="HTML")
+        await message.answer(final_text, reply_markup=reply_markup, parse_mode="MarkdownV2")
 
 def main_menu_kb(user_id):
     lang = get_language(user_id)
@@ -275,7 +283,7 @@ async def start(message: Message):
         text=text,
         photo_key="welcome_photo",
         reply_markup=main_menu_kb(user_id),
-        emoji_id=WELCOME_EMOJI_ID
+        show_emoji="welcome"
     )
 
 @dp.message(Command("lang"))
@@ -311,7 +319,7 @@ async def back_to_menu(callback: CallbackQuery):
         text=text,
         photo_key="welcome_photo",
         reply_markup=main_menu_kb(user_id),
-        emoji_id=WELCOME_EMOJI_ID
+        show_emoji="welcome"
     )
     await callback.answer()
 
@@ -348,7 +356,7 @@ async def stars_menu(callback: CallbackQuery):
         text=text,
         photo_key="stars_photo",
         reply_markup=stars_menu_kb(user_id),
-        emoji_id=STARS_EMOJI_ID
+        show_emoji="stars"
     )
     await callback.answer()
 
@@ -370,7 +378,7 @@ async def buy_stars(callback: CallbackQuery):
             [InlineKeyboardButton(text="Оплатить", url=PAYMENT_LINK)],
             [InlineKeyboardButton(text=get_text(lang, "back_btn"), callback_data="stars_menu")]
         ]),
-        emoji_id=PAYMENT_EMOJI_ID
+        show_emoji="payment"
     )
     await callback.answer()
 
@@ -409,7 +417,7 @@ async def choose_country(callback: CallbackQuery):
             [InlineKeyboardButton(text="Оплатить", url=PAYMENT_LINK)],
             [InlineKeyboardButton(text=get_text(lang, "back_btn"), callback_data="accounts_menu")]
         ]),
-        emoji_id=PAYMENT_EMOJI_ID
+        show_emoji="payment"
     )
     await callback.answer()
 
