@@ -11,7 +11,7 @@ from aiogram.filters import Command
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
-API_TOKEN = '8773442422:AAH8WlnXUrZsCuvo1xsjnbAZ8ngUGIuaAS4'
+API_TOKEN = '8785117470:AAFSIOYEFQ31pH8kzDQ9M7V4E9VzbRbysLo'
 
 bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
@@ -50,13 +50,15 @@ conn.commit()
 
 ADMIN_IDS = [8364328997, 8318310777]
 SELLER_USERNAME = "vorrxy"
-WELCOME_EMOJI_ID = "5440431182602842059"
-STARS_EMOJI_ID = "5348570868752595928"
-PAYMENT_EMOJI_ID = "5409048419211682843"
 PHONE_NUMBER = "+79155613790"
 BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
+
+# Премиум-эмодзи ID (актуальные)
+WELCOME_EMOJI_ID = "5465263910414195580"   # 💝
+STARS_EMOJI_ID = "5471952986970267163"     # 💎
+PAYMENT_EMOJI_ID = "5370900768796711127"   # 🍾
 
 COUNTRIES = ["Индонезия", "Индия"]
 
@@ -112,60 +114,60 @@ def get_text(lang, key, **kwargs):
             "stars_menu": "Выберите количество:",
             "accounts_menu": "Выберите страну для заказа аккаунта:",
             "choose_payment": "Выберите способ оплаты:",
-            "buy_stars_title": "💳 Счет на оплату\n\nТовар: {stars} звезд\nСумма к оплате: {price}₽\n\n🔗 Ссылка для оплаты:\n{link}",
-            "buy_account_title": "💳 Счет на оплату\n\nТовар: Аккаунт {country}\nСумма к оплате: {amount}⭐\n\n🔗 Ссылка для оплаты:\n{link}",
-            "payment_success": "✅ Оплата прошла успешно!\n\nАккаунт {country} будет отправлен в течение 5 минут.\nСпасибо за покупку!",
-            "info_text": "ℹ️ Информация о магазине\n\n📦 Мы продаем аккаунты и звёзды Telegram\n\n💳 После оплаты пришлите скриншот чека в личные сообщения.",
-            "lang_changed": "🌐 Язык изменен на русский",
-            "lang_changed_en": "🌐 Language changed to English",
+            "buy_stars_title": "Счет на оплату\n\nТовар: {stars} звезд\nСумма к оплате: {price}₽\n\nСсылка для оплаты:\n{link}",
+            "buy_account_title": "Счет на оплату\n\nТовар: Аккаунт {country}\nСумма к оплате: {amount}⭐\n\nСсылка для оплаты:\n{link}",
+            "payment_success": "Оплата прошла успешно!\n\nАккаунт {country} будет отправлен в течение 5 минут.\nСпасибо за покупку!",
+            "info_text": "Информация о магазине\n\nМы продаем аккаунты и звёзды Telegram\n\nПосле оплаты пришлите скриншот чека в личные сообщения.",
+            "lang_changed": "Язык изменен на русский",
+            "lang_changed_en": "Language changed to English",
             "buy_stars": "Купить звезды",
             "accounts": "Аккаунты",
             "info": "Информация",
-            "reviews": "📢 Отзывы",
-            "write_seller": "📩 Написать продавцу",
+            "reviews": "Отзывы",
+            "write_seller": "Написать продавцу",
             "admin_panel": "Админ панель",
-            "gifts": "🎁 Подарки",
-            "select_gift": "🎁 Выберите подарок:",
-            "enter_user_id": "📝 Введите ID пользователя, которому отправить подарок:",
-            "enter_comment": "📝 Введите комментарий к подарку (до 128 символов):",
-            "gift_sent": "✅ Подарок отправлен!\n\n🎁 {gift_name}\n👤 Получатель: {user_id}\n💬 Комментарий: {comment}\n💸 Списано звезд: {price}⭐",
-            "gift_error": "❌ Ошибка при отправке подарка: {error}",
-            "gift_error_balance": "❌ Недостаточно звезд на балансе бота! Нужно: {price}⭐",
-            "back": "◀ Главное меню",
-            "back_btn": "◀ Назад",
-            "choose_lang": "🌐 Выберите язык:",
-            "indonesia": "🇮🇩 Индонезия",
-            "india": "🇮🇳 Индия",
+            "gifts": "Подарки",
+            "select_gift": "Выберите подарок:",
+            "enter_user_id": "Введите ID пользователя, которому отправить подарок:",
+            "enter_comment": "Введите комментарий к подарку (до 128 символов):",
+            "gift_sent": "Подарок отправлен!\n\n{gift_name}\nПолучатель: {user_id}\nКомментарий: {comment}\nСписано звезд: {price}⭐",
+            "gift_error": "Ошибка при отправке подарка: {error}",
+            "gift_error_balance": "Недостаточно звезд на балансе бота! Нужно: {price}⭐",
+            "back": "Главное меню",
+            "back_btn": "Назад",
+            "choose_lang": "Выберите язык:",
+            "indonesia": "Индонезия",
+            "india": "Индия",
         },
         "en": {
             "welcome": "Hello, {username}!\n\nChoose an action:",
             "stars_menu": "Select quantity:",
             "accounts_menu": "Select a country to order an account:",
             "choose_payment": "Select payment method:",
-            "buy_stars_title": "💳 Payment invoice\n\nProduct: {stars} stars\nAmount to pay: {price}₽\n\n🔗 Payment link:\n{link}",
-            "buy_account_title": "💳 Payment invoice\n\nProduct: Account {country}\nAmount to pay: {amount}⭐\n\n🔗 Payment link:\n{link}",
-            "payment_success": "✅ Payment successful!\n\nAccount {country} will be sent within 5 minutes.\nThank you for your purchase!",
-            "info_text": "ℹ️ Store Information\n\n📦 We sell accounts and Telegram stars\n\n💳 After payment, send a screenshot of the receipt in a personal message.",
-            "lang_changed": "🌐 Language changed to English",
-            "lang_changed_ru": "🌐 Язык изменен на русский",
+            "buy_stars_title": "Payment invoice\n\nProduct: {stars} stars\nAmount to pay: {price}₽\n\nPayment link:\n{link}",
+            "buy_account_title": "Payment invoice\n\nProduct: Account {country}\nAmount to pay: {amount}⭐\n\nPayment link:\n{link}",
+            "payment_success": "Payment successful!\n\nAccount {country} will be sent within 5 minutes.\nThank you for your purchase!",
+            "info_text": "Store Information\n\nWe sell accounts and Telegram stars\n\nAfter payment, send a screenshot of the receipt in a personal message.",
+            "lang_changed": "Language changed to English",
+            "lang_changed_ru": "Язык изменен на русский",
             "buy_stars": "Buy stars",
             "accounts": "Accounts",
             "info": "Info",
-            "reviews": "📢 Reviews",
-            "write_seller": "📩 Contact seller",
+            "reviews": "Reviews",
+            "write_seller": "Contact seller",
             "admin_panel": "Admin panel",
-            "gifts": "🎁 Gifts",
-            "select_gift": "🎁 Select a gift:",
-            "enter_user_id": "📝 Enter the user ID to send the gift to:",
-            "enter_comment": "📝 Enter comment for the gift (max 128 characters):",
-            "gift_sent": "✅ Gift sent!\n\n🎁 {gift_name}\n👤 Recipient: {user_id}\n💬 Comment: {comment}\n💸 Stars spent: {price}⭐",
-            "gift_error": "❌ Error sending gift: {error}",
-            "gift_error_balance": "❌ Insufficient bot balance! Need: {price}⭐",
-            "back": "◀ Main menu",
-            "back_btn": "◀ Back",
-            "choose_lang": "🌐 Choose language:",
-            "indonesia": "🇮🇩 Indonesia",
-            "india": "🇮🇳 India",
+            "gifts": "Gifts",
+            "select_gift": "Select a gift:",
+            "enter_user_id": "Enter the user ID to send the gift to:",
+            "enter_comment": "Enter comment for the gift (max 128 characters):",
+            "gift_sent": "Gift sent!\n\n{gift_name}\nRecipient: {user_id}\nComment: {comment}\nStars spent: {price}⭐",
+            "gift_error": "Error sending gift: {error}",
+            "gift_error_balance": "Insufficient bot balance! Need: {price}⭐",
+            "back": "Main menu",
+            "back_btn": "Back",
+            "choose_lang": "Choose language:",
+            "indonesia": "Indonesia",
+            "india": "India",
         }
     }
     
@@ -174,7 +176,7 @@ def get_text(lang, key, **kwargs):
         text = text.format(**kwargs)
     return text
 
-async def send_message_safe(message, text, photo_key, reply_markup, use_welcome_emoji=False, use_stars_emoji=False, use_payment_emoji=False):
+async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=None):
     photo_path = get_setting(photo_key)
     
     try:
@@ -183,12 +185,9 @@ async def send_message_safe(message, text, photo_key, reply_markup, use_welcome_
     except:
         pass
     
-    if use_welcome_emoji:
-        final_text = f'<tg-emoji emoji-id="{WELCOME_EMOJI_ID}"></tg-emoji> {text}'
-    elif use_stars_emoji:
-        final_text = f'<tg-emoji emoji-id="{STARS_EMOJI_ID}"></tg-emoji> {text}'
-    elif use_payment_emoji:
-        final_text = f'<tg-emoji emoji-id="{PAYMENT_EMOJI_ID}"></tg-emoji> {text}'
+    # Добавляем премиум-эмодзи если передан ID
+    if emoji_id:
+        final_text = f'<tg-emoji emoji-id="{emoji_id}"></tg-emoji> {text}'
     else:
         final_text = text
     
@@ -242,25 +241,25 @@ def accounts_menu_kb(user_id):
 
 def admin_panel_kb():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="📸 Фото приветствия", callback_data="admin_set_welcome_photo")],
-        [InlineKeyboardButton(text="📸 Фото звезд", callback_data="admin_set_stars_photo")],
-        [InlineKeyboardButton(text="📸 Фото аккаунтов", callback_data="admin_set_accounts_photo")],
-        [InlineKeyboardButton(text="🎁 Подарки", callback_data="admin_gifts")],
-        [InlineKeyboardButton(text="📋 Заказы", callback_data="admin_orders")],
-        [InlineKeyboardButton(text="◀ Главное меню", callback_data="back_to_menu")]
+        [InlineKeyboardButton(text="Фото приветствия", callback_data="admin_set_welcome_photo")],
+        [InlineKeyboardButton(text="Фото звезд", callback_data="admin_set_stars_photo")],
+        [InlineKeyboardButton(text="Фото аккаунтов", callback_data="admin_set_accounts_photo")],
+        [InlineKeyboardButton(text="Подарки", callback_data="admin_gifts")],
+        [InlineKeyboardButton(text="Заказы", callback_data="admin_orders")],
+        [InlineKeyboardButton(text="Главное меню", callback_data="back_to_menu")]
     ])
 
 def gifts_list_kb():
     buttons = []
     for gift_key, gift_data in GIFTS.items():
         buttons.append([InlineKeyboardButton(text=f"{gift_data['name']} — {gift_data['price']}⭐", callback_data=f"gift_select_{gift_key}")])
-    buttons.append([InlineKeyboardButton(text="◀ Назад", callback_data="admin_panel")])
+    buttons.append([InlineKeyboardButton(text="Назад", callback_data="admin_panel")])
     return InlineKeyboardMarkup(inline_keyboard=buttons)
 
 def lang_kb():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🇷🇺 Русский", callback_data="lang_ru")],
-        [InlineKeyboardButton(text="🇬🇧 English", callback_data="lang_en")]
+        [InlineKeyboardButton(text="Русский", callback_data="lang_ru")],
+        [InlineKeyboardButton(text="English", callback_data="lang_en")]
     ])
 
 @dp.message(Command("start"))
@@ -276,12 +275,12 @@ async def start(message: Message):
         text=text,
         photo_key="welcome_photo",
         reply_markup=main_menu_kb(user_id),
-        use_welcome_emoji=True
+        emoji_id=WELCOME_EMOJI_ID
     )
 
 @dp.message(Command("lang"))
 async def change_lang(message: Message):
-    await message.answer("🌐 Выберите язык / Choose language:", reply_markup=lang_kb())
+    await message.answer("Выберите язык / Choose language:", reply_markup=lang_kb())
 
 @dp.callback_query(F.data.startswith("lang_"))
 async def set_lang(callback: CallbackQuery):
@@ -312,7 +311,7 @@ async def back_to_menu(callback: CallbackQuery):
         text=text,
         photo_key="welcome_photo",
         reply_markup=main_menu_kb(user_id),
-        use_welcome_emoji=True
+        emoji_id=WELCOME_EMOJI_ID
     )
     await callback.answer()
 
@@ -349,7 +348,7 @@ async def stars_menu(callback: CallbackQuery):
         text=text,
         photo_key="stars_photo",
         reply_markup=stars_menu_kb(user_id),
-        use_stars_emoji=True
+        emoji_id=STARS_EMOJI_ID
     )
     await callback.answer()
 
@@ -368,10 +367,10 @@ async def buy_stars(callback: CallbackQuery):
         text=text,
         photo_key="stars_photo",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="💳 Оплатить", url=PAYMENT_LINK)],
+            [InlineKeyboardButton(text="Оплатить", url=PAYMENT_LINK)],
             [InlineKeyboardButton(text=get_text(lang, "back_btn"), callback_data="stars_menu")]
         ]),
-        use_payment_emoji=True
+        emoji_id=PAYMENT_EMOJI_ID
     )
     await callback.answer()
 
@@ -407,10 +406,10 @@ async def choose_country(callback: CallbackQuery):
         text=text,
         photo_key="accounts_photo",
         reply_markup=InlineKeyboardMarkup(inline_keyboard=[
-            [InlineKeyboardButton(text="💳 Оплатить", url=PAYMENT_LINK)],
+            [InlineKeyboardButton(text="Оплатить", url=PAYMENT_LINK)],
             [InlineKeyboardButton(text=get_text(lang, "back_btn"), callback_data="accounts_menu")]
         ]),
-        use_payment_emoji=True
+        emoji_id=PAYMENT_EMOJI_ID
     )
     await callback.answer()
 
@@ -504,26 +503,26 @@ async def handle_gift_flow(message: Message):
             lang = get_language(message.from_user.id)
             await message.answer(get_text(lang, "enter_comment"))
         except ValueError:
-            await message.answer("❌ Неверный ID пользователя. Введите число.")
+            await message.answer("Неверный ID пользователя. Введите число.")
         return
     
     if step == "awaiting_comment":
         comment = message.text.strip()
         if len(comment) > 128:
-            await message.answer("❌ Комментарий слишком длинный! Максимум 128 символов.")
+            await message.answer("Комментарий слишком длинный! Максимум 128 символов.")
             return
         
         gift_key = get_setting("selected_gift")
         recipient_id = int(get_setting("gift_recipient") or 0)
         
         if not gift_key or not recipient_id:
-            await message.answer("❌ Ошибка: выберите подарок заново.")
+            await message.answer("Ошибка: выберите подарок заново.")
             set_setting("gift_step", "")
             return
         
         gift_info = GIFTS.get(gift_key)
         if not gift_info:
-            await message.answer("❌ Подарок не найден")
+            await message.answer("Подарок не найден")
             set_setting("gift_step", "")
             return
         
@@ -623,7 +622,6 @@ async def admin_cmd(message: Message):
     )
 
 async def main():
-    # Принудительно удаляем вебхук несколько раз
     for i in range(3):
         try:
             await bot.delete_webhook(drop_pending_updates=True)
@@ -632,11 +630,9 @@ async def main():
         except Exception as e:
             log.error(f"Ошибка при удалении вебхука: {e}")
     
-    # Проверяем статус вебхука
     webhook_info = await bot.get_webhook_info()
     log.info(f"Статус вебхука: url={webhook_info.url}")
     
-    # Запускаем бота
     try:
         log.info("Запуск бота...")
         await dp.start_polling(bot, skip_updates=True)
