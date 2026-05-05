@@ -55,11 +55,13 @@ BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
 
-# Разные премиум эмодзи для разных сценариев
-WELCOME_EMOJI = '<tg-emoji emoji-id="5440431182602842059">👋</tg-emoji>'  # Приветствие
-STARS_EMOJI = '<tg-emoji emoji-id="5348570868752595928">⭐</tg-emoji>'    # Звезды
-PAYMENT_EMOJI = '<tg-emoji emoji-id="5409048419211682843">💵</tg-emoji>'   # Оплата
-GIFT_EMOJI = '<tg-emoji emoji-id="5170145012310081615">💝</tg-emoji>'      # Подарки
+# Премиум эмодзи для разных сценариев
+WELCOME_EMOJI = '<tg-emoji emoji-id="5440431182602842059">👋</tg-emoji>'      # Приветствие
+STARS_EMOJI = '<tg-emoji emoji-id="5348570868752595928">⭐</tg-emoji>'       # Звезды
+PAYMENT_EMOJI = '<tg-emoji emoji-id="5409048419211682843">💵</tg-emoji>'     # Оплата
+GIFT_EMOJI = '<tg-emoji emoji-id="5170145012310081615">💝</tg-emoji>'       # Подарки
+ACCOUNTS_EMOJI = '<tg-emoji emoji-id="5429252941804492149">✈️</tg-emoji>'    # Аккаунты
+ADMIN_EMOJI = '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>'       # Админ панель
 
 COUNTRIES = ["Индонезия", "Индия"]
 
@@ -113,7 +115,7 @@ def get_text(lang, key, **kwargs):
         "ru": {
             "welcome": f"{WELCOME_EMOJI} Здравствуйте, {{username}}!\n\nВыберите действие:",
             "stars_menu": f"{STARS_EMOJI} Выберите количество:",
-            "accounts_menu": f"{WELCOME_EMOJI} Выберите страну для заказа аккаунта:",
+            "accounts_menu": f"{ACCOUNTS_EMOJI} Выберите страну для заказа аккаунта:",
             "choose_payment": f"{WELCOME_EMOJI} Выберите способ оплаты:",
             "buy_stars_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: {{stars}} звезд\nСумма к оплате: {{price}}₽\n\nСсылка для оплаты:\n{{link}}",
             "buy_account_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: Аккаунт {{country}}\nСумма к оплате: {{amount}}⭐\n\nСсылка для оплаты:\n{{link}}",
@@ -126,7 +128,7 @@ def get_text(lang, key, **kwargs):
             "info": "Информация",
             "reviews": "Отзывы",
             "write_seller": "Написать продавцу",
-            "admin_panel": "Админ панель",
+            "admin_panel": f"{ADMIN_EMOJI} Админ панель",
             "gifts": "Подарки",
             "select_gift": f"{GIFT_EMOJI} Выберите подарок:",
             "enter_user_id": f"{GIFT_EMOJI} Введите ID пользователя, которому отправить подарок:",
@@ -143,7 +145,7 @@ def get_text(lang, key, **kwargs):
         "en": {
             "welcome": f"{WELCOME_EMOJI} Hello, {{username}}!\n\nChoose an action:",
             "stars_menu": f"{STARS_EMOJI} Select quantity:",
-            "accounts_menu": f"{WELCOME_EMOJI} Select a country to order an account:",
+            "accounts_menu": f"{ACCOUNTS_EMOJI} Select a country to order an account:",
             "choose_payment": f"{WELCOME_EMOJI} Select payment method:",
             "buy_stars_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: {{stars}} stars\nAmount to pay: {{price}}₽\n\nPayment link:\n{{link}}",
             "buy_account_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: Account {{country}}\nAmount to pay: {{amount}}⭐\n\nPayment link:\n{{link}}",
@@ -156,7 +158,7 @@ def get_text(lang, key, **kwargs):
             "info": "Info",
             "reviews": "Reviews",
             "write_seller": "Contact seller",
-            "admin_panel": "Admin panel",
+            "admin_panel": f"{ADMIN_EMOJI} Admin panel",
             "gifts": "Gifts",
             "select_gift": f"{GIFT_EMOJI} Select a gift:",
             "enter_user_id": f"{GIFT_EMOJI} Enter the user ID to send the gift to:",
@@ -404,7 +406,7 @@ async def admin_panel(callback: CallbackQuery):
         await callback.answer("Нет доступа")
         return
     
-    text = "👑 Админ-панель\n\nВыберите действие:"
+    text = get_text("ru", "admin_panel") + "\n\nВыберите действие:"
     
     await send_message_safe(
         message=callback.message,
@@ -597,7 +599,7 @@ async def admin_cmd(message: Message):
         await message.answer("Нет доступа")
         return
     
-    text = "👑 Админ-панель\n\nВыберите действие:"
+    text = get_text("ru", "admin_panel") + "\n\nВыберите действие:"
     
     await send_message_safe(
         message=message,
