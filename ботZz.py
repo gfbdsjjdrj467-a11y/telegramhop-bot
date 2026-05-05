@@ -55,9 +55,11 @@ BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
 
-# ID премиум-эмодзи
-PREMIUM_EMOJI_ID = "5440431182602842059"
-PREMIUM_EMOJI = f'<tg-emoji emoji-id="{PREMIUM_EMOJI_ID}"></tg-emoji>'
+# Разные премиум эмодзи для разных сценариев
+WELCOME_EMOJI = '<tg-emoji emoji-id="5440431182602842059">👋</tg-emoji>'  # Приветствие
+STARS_EMOJI = '<tg-emoji emoji-id="5348570868752595928">⭐</tg-emoji>'    # Звезды
+PAYMENT_EMOJI = '<tg-emoji emoji-id="5409048419211682843">💵</tg-emoji>'   # Оплата
+GIFT_EMOJI = '<tg-emoji emoji-id="5170145012310081615">💝</tg-emoji>'      # Подарки
 
 COUNTRIES = ["Индонезия", "Индия"]
 
@@ -109,16 +111,16 @@ def save_order(user_id, item_type, item_name, payment_method, amount):
 def get_text(lang, key, **kwargs):
     texts = {
         "ru": {
-            "welcome": f"{PREMIUM_EMOJI} Здравствуйте, {{username}}!\n\nВыберите действие:",
-            "stars_menu": f"{PREMIUM_EMOJI} Выберите количество:",
-            "accounts_menu": f"{PREMIUM_EMOJI} Выберите страну для заказа аккаунта:",
-            "choose_payment": f"{PREMIUM_EMOJI} Выберите способ оплаты:",
-            "buy_stars_title": f"{PREMIUM_EMOJI} Счет на оплату\n\nТовар: {{stars}} звезд\nСумма к оплате: {{price}}₽\n\nСсылка для оплаты:\n{{link}}",
-            "buy_account_title": f"{PREMIUM_EMOJI} Счет на оплату\n\nТовар: Аккаунт {{country}}\nСумма к оплате: {{amount}}⭐\n\nСсылка для оплаты:\n{{link}}",
-            "payment_success": f"{PREMIUM_EMOJI} Оплата прошла успешно!\n\nАккаунт {{country}} будет отправлен в течение 5 минут.\nСпасибо за покупку!",
-            "info_text": f"{PREMIUM_EMOJI} Информация о магазине\n\n📦 Мы продаем аккаунты и звёзды Telegram\n\n💳 После оплаты пришлите скриншот чека в личные сообщения.",
-            "lang_changed": f"{PREMIUM_EMOJI} Язык изменен на русский",
-            "lang_changed_en": f"{PREMIUM_EMOJI} Language changed to English",
+            "welcome": f"{WELCOME_EMOJI} Здравствуйте, {{username}}!\n\nВыберите действие:",
+            "stars_menu": f"{STARS_EMOJI} Выберите количество:",
+            "accounts_menu": f"{WELCOME_EMOJI} Выберите страну для заказа аккаунта:",
+            "choose_payment": f"{WELCOME_EMOJI} Выберите способ оплаты:",
+            "buy_stars_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: {{stars}} звезд\nСумма к оплате: {{price}}₽\n\nСсылка для оплаты:\n{{link}}",
+            "buy_account_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: Аккаунт {{country}}\nСумма к оплате: {{amount}}⭐\n\nСсылка для оплаты:\n{{link}}",
+            "payment_success": f"{WELCOME_EMOJI} Оплата прошла успешно!\n\nАккаунт {{country}} будет отправлен в течение 5 минут.\nСпасибо за покупку!",
+            "info_text": f"{WELCOME_EMOJI} Информация о магазине\n\n📦 Мы продаем аккаунты и звёзды Telegram\n\n💳 После оплаты пришлите скриншот чека в личные сообщения.",
+            "lang_changed": f"{WELCOME_EMOJI} Язык изменен на русский",
+            "lang_changed_en": f"{WELCOME_EMOJI} Language changed to English",
             "buy_stars": "Купить звезды",
             "accounts": "Аккаунты",
             "info": "Информация",
@@ -126,29 +128,29 @@ def get_text(lang, key, **kwargs):
             "write_seller": "Написать продавцу",
             "admin_panel": "Админ панель",
             "gifts": "Подарки",
-            "select_gift": f"{PREMIUM_EMOJI} Выберите подарок:",
-            "enter_user_id": f"{PREMIUM_EMOJI} Введите ID пользователя, которому отправить подарок:",
-            "enter_comment": f"{PREMIUM_EMOJI} Введите комментарий к подарку (до 128 символов):",
-            "gift_sent": f"{PREMIUM_EMOJI} Подарок отправлен!\n\n{{gift_name}}\nПолучатель: {{user_id}}\nКомментарий: {{comment}}\nСписано звезд: {{price}}⭐",
-            "gift_error": f"{PREMIUM_EMOJI} Ошибка при отправке подарка: {{error}}",
-            "gift_error_balance": f"{PREMIUM_EMOJI} Недостаточно звезд на балансе бота! Нужно: {{price}}⭐",
+            "select_gift": f"{GIFT_EMOJI} Выберите подарок:",
+            "enter_user_id": f"{GIFT_EMOJI} Введите ID пользователя, которому отправить подарок:",
+            "enter_comment": f"{GIFT_EMOJI} Введите комментарий к подарку (до 128 символов):",
+            "gift_sent": f"{GIFT_EMOJI} Подарок отправлен!\n\n{{gift_name}}\nПолучатель: {{user_id}}\nКомментарий: {{comment}}\nСписано звезд: {{price}}⭐",
+            "gift_error": f"{GIFT_EMOJI} Ошибка при отправке подарка: {{error}}",
+            "gift_error_balance": f"{GIFT_EMOJI} Недостаточно звезд на балансе бота! Нужно: {{price}}⭐",
             "back": "◀ Главное меню",
             "back_btn": "◀ Назад",
-            "choose_lang": f"{PREMIUM_EMOJI} Выберите язык:",
+            "choose_lang": f"{WELCOME_EMOJI} Выберите язык:",
             "indonesia": "🇮🇩 Индонезия",
             "india": "🇮🇳 Индия",
         },
         "en": {
-            "welcome": f"{PREMIUM_EMOJI} Hello, {{username}}!\n\nChoose an action:",
-            "stars_menu": f"{PREMIUM_EMOJI} Select quantity:",
-            "accounts_menu": f"{PREMIUM_EMOJI} Select a country to order an account:",
-            "choose_payment": f"{PREMIUM_EMOJI} Select payment method:",
-            "buy_stars_title": f"{PREMIUM_EMOJI} Payment invoice\n\nProduct: {{stars}} stars\nAmount to pay: {{price}}₽\n\nPayment link:\n{{link}}",
-            "buy_account_title": f"{PREMIUM_EMOJI} Payment invoice\n\nProduct: Account {{country}}\nAmount to pay: {{amount}}⭐\n\nPayment link:\n{{link}}",
-            "payment_success": f"{PREMIUM_EMOJI} Payment successful!\n\nAccount {{country}} will be sent within 5 minutes.\nThank you for your purchase!",
-            "info_text": f"{PREMIUM_EMOJI} Store Information\n\n📦 We sell accounts and Telegram stars\n\n💳 After payment, send a screenshot of the receipt in a personal message.",
-            "lang_changed": f"{PREMIUM_EMOJI} Language changed to English",
-            "lang_changed_ru": f"{PREMIUM_EMOJI} Язык изменен на русский",
+            "welcome": f"{WELCOME_EMOJI} Hello, {{username}}!\n\nChoose an action:",
+            "stars_menu": f"{STARS_EMOJI} Select quantity:",
+            "accounts_menu": f"{WELCOME_EMOJI} Select a country to order an account:",
+            "choose_payment": f"{WELCOME_EMOJI} Select payment method:",
+            "buy_stars_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: {{stars}} stars\nAmount to pay: {{price}}₽\n\nPayment link:\n{{link}}",
+            "buy_account_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: Account {{country}}\nAmount to pay: {{amount}}⭐\n\nPayment link:\n{{link}}",
+            "payment_success": f"{WELCOME_EMOJI} Payment successful!\n\nAccount {{country}} will be sent within 5 minutes.\nThank you for your purchase!",
+            "info_text": f"{WELCOME_EMOJI} Store Information\n\n📦 We sell accounts and Telegram stars\n\n💳 After payment, send a screenshot of the receipt in a personal message.",
+            "lang_changed": f"{WELCOME_EMOJI} Language changed to English",
+            "lang_changed_ru": f"{WELCOME_EMOJI} Язык изменен на русский",
             "buy_stars": "Buy stars",
             "accounts": "Accounts",
             "info": "Info",
@@ -156,15 +158,15 @@ def get_text(lang, key, **kwargs):
             "write_seller": "Contact seller",
             "admin_panel": "Admin panel",
             "gifts": "Gifts",
-            "select_gift": f"{PREMIUM_EMOJI} Select a gift:",
-            "enter_user_id": f"{PREMIUM_EMOJI} Enter the user ID to send the gift to:",
-            "enter_comment": f"{PREMIUM_EMOJI} Enter comment for the gift (max 128 characters):",
-            "gift_sent": f"{PREMIUM_EMOJI} Gift sent!\n\n{{gift_name}}\nRecipient: {{user_id}}\nComment: {{comment}}\nStars spent: {{price}}⭐",
-            "gift_error": f"{PREMIUM_EMOJI} Error sending gift: {{error}}",
-            "gift_error_balance": f"{PREMIUM_EMOJI} Insufficient bot balance! Need: {{price}}⭐",
+            "select_gift": f"{GIFT_EMOJI} Select a gift:",
+            "enter_user_id": f"{GIFT_EMOJI} Enter the user ID to send the gift to:",
+            "enter_comment": f"{GIFT_EMOJI} Enter comment for the gift (max 128 characters):",
+            "gift_sent": f"{GIFT_EMOJI} Gift sent!\n\n{{gift_name}}\nRecipient: {{user_id}}\nComment: {{comment}}\nStars spent: {{price}}⭐",
+            "gift_error": f"{GIFT_EMOJI} Error sending gift: {{error}}",
+            "gift_error_balance": f"{GIFT_EMOJI} Insufficient bot balance! Need: {{price}}⭐",
             "back": "◀ Main menu",
             "back_btn": "◀ Back",
-            "choose_lang": f"{PREMIUM_EMOJI} Choose language:",
+            "choose_lang": f"{WELCOME_EMOJI} Choose language:",
             "indonesia": "🇮🇩 Indonesia",
             "india": "🇮🇳 India",
         }
