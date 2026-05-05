@@ -399,7 +399,6 @@ async def choose_country(callback: CallbackQuery):
     lang = get_language(user_id)
     country = callback.data.split("_")[1]
     
-    # Цена аккаунта 40⭐
     amount = 40
     
     text = get_text(lang, "buy_account_title", country=country, amount=amount, link=PAYMENT_LINK)
@@ -630,6 +629,10 @@ async def admin_cmd(message: Message):
 async def main():
     try:
         log.info("Запуск бота...")
+        
+        # Удаляем вебхук перед запуском polling (исправление ошибки Conflict)
+        await bot.delete_webhook(drop_pending_updates=True)
+        
         await dp.start_polling(bot, skip_updates=True)
     finally:
         await bot.session.close()
