@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 
 API_TOKEN = '8785117470:AAFSIOYEFQ31pH8kzDQ9M7V4E9VzbRbysLo'
 
-bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode="MarkdownV2"))
+bot = Bot(token=API_TOKEN, default=DefaultBotProperties(parse_mode="HTML"))
 dp = Dispatcher()
 
 PHOTO_DIR = "photos"
@@ -176,28 +176,19 @@ def get_text(lang, key, **kwargs):
         text = text.format(**kwargs)
     return text
 
-async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=None, edit_mode=False):
+async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=None):
     photo_path = get_setting(photo_key)
     
-    # Добавляем премиум-эмодзи через MarkdownV2
+    # Добавляем премиум-эмодзи через HTML теги
     if emoji_id == WELCOME_EMOJI_ID:
-        final_text = f"[👋](tg://emoji?id={WELCOME_EMOJI_ID}) {text}"
+        final_text = f'<tg-emoji emoji-id="{WELCOME_EMOJI_ID}"></tg-emoji> {text}'
     elif emoji_id == STARS_EMOJI_ID:
-        final_text = f"[⭐](tg://emoji?id={STARS_EMOJI_ID}) {text}"
+        final_text = f'<tg-emoji emoji-id="{STARS_EMOJI_ID}"></tg-emoji> {text}'
     elif emoji_id == PAYMENT_EMOJI_ID:
-        final_text = f"[💵](tg://emoji?id={PAYMENT_EMOJI_ID}) {text}"
+        final_text = f'<tg-emoji emoji-id="{PAYMENT_EMOJI_ID}"></tg-emoji> {text}'
     else:
         final_text = text
     
-    if edit_mode:
-        # Режим редактирования - обновляем существующее сообщение
-        try:
-            await message.edit_text(final_text, reply_markup=reply_markup, parse_mode="MarkdownV2")
-            return
-        except:
-            pass
-    
-    # Обычная отправка
     if photo_path and os.path.exists(photo_path):
         try:
             photo = FSInputFile(photo_path)
@@ -205,13 +196,13 @@ async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=Non
                 photo=photo,
                 caption=final_text,
                 reply_markup=reply_markup,
-                parse_mode="MarkdownV2"
+                parse_mode="HTML"
             )
         except Exception as e:
             log.error(f"Ошибка фото: {e}")
-            await message.answer(final_text, reply_markup=reply_markup, parse_mode="MarkdownV2")
+            await message.answer(final_text, reply_markup=reply_markup, parse_mode="HTML")
     else:
-        await message.answer(final_text, reply_markup=reply_markup, parse_mode="MarkdownV2")
+        await message.answer(final_text, reply_markup=reply_markup, parse_mode="HTML")
 
 def main_menu_kb(user_id):
     lang = get_language(user_id)
