@@ -55,16 +55,15 @@ BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
 
-# Премиум эмодзи для разных сценариев
-WELCOME_EMOJI = '<tg-emoji emoji-id="5440431182602842059">👋</tg-emoji>'      # Приветствие
-STARS_EMOJI = '<tg-emoji emoji-id="5348570868752595928">⭐</tg-emoji>'       # Звезды
-PAYMENT_EMOJI = '<tg-emoji emoji-id="5409048419211682843">💵</tg-emoji>'     # Оплата
-GIFT_EMOJI = '<tg-emoji emoji-id="5170145012310081615">💝</tg-emoji>'       # Подарки
-ACCOUNTS_EMOJI = '<tg-emoji emoji-id="5429252941804492149">✈️</tg-emoji>'    # Аккаунты
-ADMIN_EMOJI = '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>'       # Админ панель
+# Премиум эмодзи
+WELCOME_EMOJI = '<tg-emoji emoji-id="5440431182602842059">👋</tg-emoji>'
+STARS_EMOJI = '<tg-emoji emoji-id="5348570868752595928">⭐</tg-emoji>'
+PAYMENT_EMOJI = '<tg-emoji emoji-id="5409048419211682843">💵</tg-emoji>'
+GIFT_EMOJI = '<tg-emoji emoji-id="5170145012310081615">💝</tg-emoji>'
+ACCOUNTS_EMOJI = '<tg-emoji emoji-id="5429252941804492149">✈️</tg-emoji>'
+ADMIN_EMOJI = '<tg-emoji emoji-id="5217822164362739968">👑</tg-emoji>'
 
-COUNTRIES = ["Индонезия", "Индия"]
-
+# Подарки
 GIFTS = {
     "heart": {"id": "5170145012310081615", "name": "💝 Сердце", "price": 15},
     "bear": {"id": "5170233102089322756", "name": "🧸 Мишка", "price": 15},
@@ -115,11 +114,9 @@ def get_text(lang, key, **kwargs):
         "ru": {
             "welcome": f"{WELCOME_EMOJI} Здравствуйте, {{username}}!\n\nВыберите действие:",
             "stars_menu": f"{STARS_EMOJI} Выберите количество:",
-            "accounts_menu": f"{ACCOUNTS_EMOJI} Выберите страну для заказа аккаунта:",
-            "choose_payment": f"{WELCOME_EMOJI} Выберите способ оплаты:",
-            "buy_stars_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: {{stars}} звезд\nСумма к оплате: {{price}}₽\n\nСсылка для оплаты:\n{{link}}",
-            "buy_account_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: Аккаунт {{country}}\nСумма к оплате: {{amount}}⭐\n\nСсылка для оплаты:\n{{link}}",
-            "payment_success": f"{WELCOME_EMOJI} Оплата прошла успешно!\n\nАккаунт {{country}} будет отправлен в течение 5 минут.\nСпасибо за покупку!",
+            "accounts_menu": f"{ACCOUNTS_EMOJI} Заказать аккаунт под заказ",
+            "buy_account_title": f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: Аккаунт под заказ\nСумма к оплате: 50₽\n\nСсылка для оплаты:\n{PAYMENT_LINK}",
+            "payment_success": f"{WELCOME_EMOJI} Оплата прошла успешно!\n\nАккаунт будет отправлен в течение 5 минут.\nСпасибо за покупку!",
             "info_text": f"{WELCOME_EMOJI} Информация о магазине\n\n📦 Мы продаем аккаунты и звёзды Telegram\n\n💳 После оплаты пришлите скриншот чека в личные сообщения.",
             "lang_changed": f"{WELCOME_EMOJI} Язык изменен на русский",
             "lang_changed_en": f"{WELCOME_EMOJI} Language changed to English",
@@ -139,17 +136,13 @@ def get_text(lang, key, **kwargs):
             "back": "◀ Главное меню",
             "back_btn": "◀ Назад",
             "choose_lang": f"{WELCOME_EMOJI} Выберите язык:",
-            "indonesia": "🇮🇩 Индонезия",
-            "india": "🇮🇳 Индия",
         },
         "en": {
             "welcome": f"{WELCOME_EMOJI} Hello, {{username}}!\n\nChoose an action:",
             "stars_menu": f"{STARS_EMOJI} Select quantity:",
-            "accounts_menu": f"{ACCOUNTS_EMOJI} Select a country to order an account:",
-            "choose_payment": f"{WELCOME_EMOJI} Select payment method:",
-            "buy_stars_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: {{stars}} stars\nAmount to pay: {{price}}₽\n\nPayment link:\n{{link}}",
-            "buy_account_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: Account {{country}}\nAmount to pay: {{amount}}⭐\n\nPayment link:\n{{link}}",
-            "payment_success": f"{WELCOME_EMOJI} Payment successful!\n\nAccount {{country}} will be sent within 5 minutes.\nThank you for your purchase!",
+            "accounts_menu": f"{ACCOUNTS_EMOJI} Order an account",
+            "buy_account_title": f"{PAYMENT_EMOJI} Payment invoice\n\nProduct: Account\nAmount to pay: 50₽\n\nPayment link:\n{PAYMENT_LINK}",
+            "payment_success": f"{WELCOME_EMOJI} Payment successful!\n\nThe account will be sent within 5 minutes.\nThank you for your purchase!",
             "info_text": f"{WELCOME_EMOJI} Store Information\n\n📦 We sell accounts and Telegram stars\n\n💳 After payment, send a screenshot of the receipt in a personal message.",
             "lang_changed": f"{WELCOME_EMOJI} Language changed to English",
             "lang_changed_ru": f"{WELCOME_EMOJI} Язык изменен на русский",
@@ -169,8 +162,6 @@ def get_text(lang, key, **kwargs):
             "back": "◀ Main menu",
             "back_btn": "◀ Back",
             "choose_lang": f"{WELCOME_EMOJI} Choose language:",
-            "indonesia": "🇮🇩 Indonesia",
-            "india": "🇮🇳 India",
         }
     }
     
@@ -222,15 +213,6 @@ def stars_menu_kb(user_id):
         [InlineKeyboardButton(text="500⭐", callback_data="buy_500")],
         [InlineKeyboardButton(text=get_text(lang, "back"), callback_data="back_to_menu")]
     ])
-
-def accounts_menu_kb(user_id):
-    lang = get_language(user_id)
-    kb = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=get_text(lang, "indonesia"), callback_data="country_Индонезия")],
-        [InlineKeyboardButton(text=get_text(lang, "india"), callback_data="country_Индия")],
-        [InlineKeyboardButton(text=get_text(lang, "back"), callback_data="back_to_menu")]
-    ])
-    return kb
 
 def admin_panel_kb():
     return InlineKeyboardMarkup(inline_keyboard=[
@@ -349,7 +331,7 @@ async def buy_stars(callback: CallbackQuery):
     prices = {"50": 65, "100": 130, "200": 260, "300": 390, "400": 520, "500": 650}
     price = prices.get(stars, 0)
     
-    text = get_text(lang, "buy_stars_title", stars=stars, price=price, link=PAYMENT_LINK)
+    text = f"{PAYMENT_EMOJI} Счет на оплату\n\nТовар: {stars} звезд\nСумма к оплате: {price}₽\n\nСсылка для оплаты:\n{PAYMENT_LINK}"
     
     await send_message_safe(
         message=callback.message,
@@ -369,25 +351,26 @@ async def accounts_menu(callback: CallbackQuery):
     
     text = get_text(lang, "accounts_menu")
     
+    kb = InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Заказать", callback_data="buy_account")]
+    ])
+    
     await send_message_safe(
         message=callback.message,
         text=text,
         photo_key="accounts_photo",
-        reply_markup=accounts_menu_kb(user_id)
+        reply_markup=kb
     )
     await callback.answer()
 
-@dp.callback_query(F.data.startswith("country_"))
-async def choose_country(callback: CallbackQuery):
+@dp.callback_query(F.data == "buy_account")
+async def buy_account(callback: CallbackQuery):
     user_id = callback.from_user.id
     lang = get_language(user_id)
-    country = callback.data.split("_")[1]
     
-    amount = 40
+    text = get_text(lang, "buy_account_title")
     
-    text = get_text(lang, "buy_account_title", country=country, amount=amount, link=PAYMENT_LINK)
-    
-    save_order(user_id, "account", country, "stars", amount)
+    save_order(user_id, "account", "Под заказ", "rub", 50)
     
     await send_message_safe(
         message=callback.message,
