@@ -55,14 +55,10 @@ BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
 
-# ID премиум-эмодзи (новые)
-WELCOME_EMOJI_ID = "5440431182602842059"      # 👋
-STARS_EMOJI_ID = "5348570868752595928"        # ⭐
-PAYMENT_EMOJI_ID = "5409048419211682843"      # 💵
-
-# Функция для вставки премиум-эмодзи в MarkdownV2
-def emoji(emoji_id, fallback=""):
-    return f'[😊](tg://emoji?id={emoji_id})'
+# ID премиум-эмодзи
+WELCOME_EMOJI_ID = "5440431182602842059"
+STARS_EMOJI_ID = "5348570868752595928"
+PAYMENT_EMOJI_ID = "5409048419211682843"
 
 COUNTRIES = ["Индонезия", "Индия"]
 
@@ -180,25 +176,28 @@ def get_text(lang, key, **kwargs):
         text = text.format(**kwargs)
     return text
 
-async def send_message_safe(message, text, photo_key, reply_markup, show_emoji=None):
+async def send_message_safe(message, text, photo_key, reply_markup, emoji_id=None, edit_mode=False):
     photo_path = get_setting(photo_key)
     
-    try:
-        if message.photo or message.text:
-            await message.delete()
-    except:
-        pass
-    
-    # Добавляем премиум-эмодзи в начале (MarkdownV2)
-    if show_emoji == "welcome":
-        final_text = f'[😊](tg://emoji?id={WELCOME_EMOJI_ID}) {text}'
-    elif show_emoji == "stars":
-        final_text = f'[⭐](tg://emoji?id={STARS_EMOJI_ID}) {text}'
-    elif show_emoji == "payment":
-        final_text = f'[💵](tg://emoji?id={PAYMENT_EMOJI_ID}) {text}'
+    # Добавляем премиум-эмодзи через MarkdownV2
+    if emoji_id == WELCOME_EMOJI_ID:
+        final_text = f"[👋](tg://emoji?id={WELCOME_EMOJI_ID}) {text}"
+    elif emoji_id == STARS_EMOJI_ID:
+        final_text = f"[⭐](tg://emoji?id={STARS_EMOJI_ID}) {text}"
+    elif emoji_id == PAYMENT_EMOJI_ID:
+        final_text = f"[💵](tg://emoji?id={PAYMENT_EMOJI_ID}) {text}"
     else:
         final_text = text
     
+    if edit_mode:
+        # Режим редактирования - обновляем существующее сообщение
+        try:
+            await message.edit_text(final_text, reply_markup=reply_markup, parse_mode="MarkdownV2")
+            return
+        except:
+            pass
+    
+    # Обычная отправка
     if photo_path and os.path.exists(photo_path):
         try:
             photo = FSInputFile(photo_path)
@@ -283,7 +282,7 @@ async def start(message: Message):
         text=text,
         photo_key="welcome_photo",
         reply_markup=main_menu_kb(user_id),
-        show_emoji="welcome"
+        emoji_id=WELCOME_EMOJI_ID
     )
 
 @dp.message(Command("lang"))
@@ -302,7 +301,6 @@ async def set_lang(callback: CallbackQuery):
         text = get_text("en", "lang_changed")
     
     await callback.message.answer(text)
-    await callback.message.delete()
     await start(callback.message)
     await callback.answer()
 
@@ -319,7 +317,7 @@ async def back_to_menu(callback: CallbackQuery):
         text=text,
         photo_key="welcome_photo",
         reply_markup=main_menu_kb(user_id),
-        show_emoji="welcome"
+        emoji_id=WELCOME_EMOJI_ID
     )
     await callback.answer()
 
@@ -356,7 +354,7 @@ async def stars_menu(callback: CallbackQuery):
         text=text,
         photo_key="stars_photo",
         reply_markup=stars_menu_kb(user_id),
-        show_emoji="stars"
+        emoji_id=STARS_EMOJI_ID
     )
     await callback.answer()
 
@@ -378,7 +376,7 @@ async def buy_stars(callback: CallbackQuery):
             [InlineKeyboardButton(text="Оплатить", url=PAYMENT_LINK)],
             [InlineKeyboardButton(text=get_text(lang, "back_btn"), callback_data="stars_menu")]
         ]),
-        show_emoji="payment"
+        emoji_id=PAYMENT_EMOJI_ID
     )
     await callback.answer()
 
@@ -417,7 +415,7 @@ async def choose_country(callback: CallbackQuery):
             [InlineKeyboardButton(text="Оплатить", url=PAYMENT_LINK)],
             [InlineKeyboardButton(text=get_text(lang, "back_btn"), callback_data="accounts_menu")]
         ]),
-        show_emoji="payment"
+        emoji_id=PAYMENT_EMOJI_ID
     )
     await callback.answer()
 
