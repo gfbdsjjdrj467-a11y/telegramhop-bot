@@ -623,13 +623,22 @@ async def admin_cmd(message: Message):
     )
 
 async def main():
+    # Принудительно удаляем вебхук несколько раз
+    for i in range(3):
+        try:
+            await bot.delete_webhook(drop_pending_updates=True)
+            log.info(f"Попытка {i+1}: вебхук удалён")
+            await asyncio.sleep(1)
+        except Exception as e:
+            log.error(f"Ошибка при удалении вебхука: {e}")
+    
+    # Проверяем статус вебхука
+    webhook_info = await bot.get_webhook_info()
+    log.info(f"Статус вебхука: url={webhook_info.url}")
+    
+    # Запускаем бота
     try:
         log.info("Запуск бота...")
-        
-        # Удаляем вебхук и пропускаем все старые обновления
-        await bot.delete_webhook(drop_pending_updates=True)
-        log.info("Вебхук удалён")
-        
         await dp.start_polling(bot, skip_updates=True)
     except Exception as e:
         log.error(f"Ошибка: {e}")
