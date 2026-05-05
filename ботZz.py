@@ -4,7 +4,7 @@ import sqlite3
 import os
 from datetime import datetime
 from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, FSInputFile, LabeledPrice, PreCheckoutQuery
+from aiogram.types import Message, CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup, FSInputFile
 from aiogram.client.bot import DefaultBotProperties
 from aiogram.filters import Command
 
@@ -46,22 +46,29 @@ cursor.execute('''
         created_at TEXT
     )
 ''')
+cursor.execute('''
+    CREATE TABLE IF NOT EXISTS gift_flow (
+        user_id INTEGER PRIMARY KEY,
+        step TEXT,
+        selected_gift TEXT,
+        recipient_id INTEGER,
+        comment TEXT
+    )
+''')
 conn.commit()
 
 ADMIN_IDS = [8364328997, 8318310777]
 SELLER_USERNAME = "vorrxy"
-WELCOME_EMOJI_ID = "5440431182602842059"      # 👋
-STARS_EMOJI_ID = "5348570868752595928"        # ⭐
-PAYMENT_EMOJI_ID = "5409048419211682843"      # 💵
+WELCOME_EMOJI_ID = "5440431182602842059"
+STARS_EMOJI_ID = "5348570868752595928"
+PAYMENT_EMOJI_ID = "5409048419211682843"
 PHONE_NUMBER = "+79155613790"
 BANK_NAME = "Sberbank"
 PAYMENT_LINK = "https://www.sberbank.ru/ru/choise_bank?requisiteNumber=79155613790&bankCode=100000000111"
 REVIEWS_LINK = "https://t.me/grettpo"
 
-# Страны для аккаунтов
 COUNTRIES = ["Индонезия", "Индия"]
 
-# ID подарков из API
 GIFTS = {
     "heart": {"id": "5170145012310081615", "name": "💝 Сердце", "price": 15},
     "bear": {"id": "5170233102089322756", "name": "🧸 Мишка", "price": 15},
@@ -105,6 +112,22 @@ def set_language(user_id, lang):
 def save_order(user_id, item_type, item_name, payment_method, amount):
     cursor.execute('INSERT INTO orders (user_id, item_type, item_name, payment_method, amount, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
                   (user_id, item_type, item_name, payment_method, amount, "pending", str(datetime.now())))
+    conn.commit()
+
+def get_gift_flow(user_id):
+    cursor.execute('SELECT step, selected_gift, recipient_id, comment FROM gift_flow WHERE user_id = ?', (user_id,))
+    result = cursor.fetchone()
+    if result:
+        return {"step": result[0], "selected_gift": result[1], "recipient_id": result[2], "comment": result[3]}
+    return {"step": None, "selected_gift": None, "recipient_id": None, "comment": None}
+
+def set_gift_flow(user_id, step, selected_gift=None, recipient_id=None, comment=None):
+    cursor.execute('INSERT OR REPLACE INTO gift_flow (user_id, step, selected_gift, recipient_id, comment) VALUES (?, ?, ?, ?, ?)',
+                  (user_id, step, selected_gift, recipient_id, comment))
+    conn.commit()
+
+def clear_gift_flow(user_id):
+    cursor.execute('DELETE FROM gift_flow WHERE user_id = ?', (user_id,))
     conn.commit()
 
 def get_text(lang, key, **kwargs):
@@ -185,7 +208,6 @@ async def send_message_safe(message, text, photo_key, reply_markup, use_welcome_
     except:
         pass
     
-    # Добавляем премиум-эмодзи в зависимости от параметра
     if use_welcome_emoji:
         final_text = f'<tg-emoji emoji-id="{WELCOME_EMOJI_ID}"></tg-emoji> {text}'
     elif use_stars_emoji:
@@ -487,8 +509,9 @@ async def gift_select(callback: CallbackQuery):
         await callback.answer("Подарок не найден")
         return
     
-    lang = get_language(callback.from_user.id)
-    set_setting("selected_gift", gift_key)
+    user_id = callback.from_user.id
+    lang = get_language(user_id)
+    set_gift_flow(user_id, "awaiting_user_id", selected_gift=gift_key)
     await callback.message.answer(get_text(lang, "enter_user_id"))
     await callback.answer()
 
@@ -497,14 +520,17 @@ async def handle_gift_flow(message: Message):
     if not is_admin(message.from_user.id):
         return
     
-    step = get_setting("gift_step")
+    user_id = message.from_user.id
+    flow = get_gift_flow(user_id)
+    step = flow.get("step")
     
     if step == "awaiting_user_id":
         try:
             recipient_id = int(message.text.strip())
-            set_setting("gift_recipient", str(recipient_id))
-            set_setting("gift_step", "awaiting_comment")
-            lang = get_language(message.from_user.id)
+            set_gift_flow(user_id, "awaiting_comment", 
+                         selected_gift=flow.get("selected_gift"), 
+                         recipient_id=recipient_id)
+            lang = get_language(user_id)
             await message.answer(get_text(lang, "enter_comment"))
         except ValueError:
             await message.answer("❌ Неверный ID пользователя. Введите число.")
@@ -516,21 +542,21 @@ async def handle_gift_flow(message: Message):
             await message.answer("❌ Комментарий слишком длинный! Максимум 128 символов.")
             return
         
-        gift_key = get_setting("selected_gift")
-        recipient_id = int(get_setting("gift_recipient") or 0)
+        gift_key = flow.get("selected_gift")
+        recipient_id = flow.get("recipient_id")
         
         if not gift_key or not recipient_id:
             await message.answer("❌ Ошибка: выберите подарок заново.")
-            set_setting("gift_step", "")
+            clear_gift_flow(user_id)
             return
         
         gift_info = GIFTS.get(gift_key)
         if not gift_info:
             await message.answer("❌ Подарок не найден")
-            set_setting("gift_step", "")
+            clear_gift_flow(user_id)
             return
         
-        lang = get_language(message.from_user.id)
+        lang = get_language(user_id)
         
         try:
             await bot.send_gift(
@@ -555,16 +581,8 @@ async def handle_gift_flow(message: Message):
             else:
                 await message.answer(get_text(lang, "gift_error", error=error_msg[:100]))
         
-        set_setting("gift_step", "")
-        set_setting("selected_gift", "")
-        set_setting("gift_recipient", "")
+        clear_gift_flow(user_id)
         return
-    
-    # Первый шаг — ожидаем ID пользователя
-    gift_key = get_setting("selected_gift")
-    if gift_key:
-        set_setting("gift_step", "awaiting_user_id")
-        await handle_gift_flow(message)
 
 @dp.callback_query(F.data == "admin_orders")
 async def admin_orders(callback: CallbackQuery):
@@ -601,15 +619,15 @@ async def save_photo(message: Message):
     
     if "привет" in caption:
         set_setting("welcome_photo", file_path)
-        await message.answer("Фото для приветствия сохранено!")
+        await message.answer("✅ Фото для приветствия сохранено!")
     elif "звезды" in caption:
         set_setting("stars_photo", file_path)
-        await message.answer("Фото для звезд сохранено!")
+        await message.answer("✅ Фото для звезд сохранено!")
     elif "аккаунты" in caption:
         set_setting("accounts_photo", file_path)
-        await message.answer("Фото для аккаунтов сохранено!")
+        await message.answer("✅ Фото для аккаунтов сохранено!")
     else:
-        await message.answer("Укажите подпись: привет, звезды или аккаунты")
+        await message.answer("❌ Укажите подпись: привет, звезды или аккаунты")
 
 @dp.message(Command("admin"))
 async def admin_cmd(message: Message):
@@ -629,10 +647,7 @@ async def admin_cmd(message: Message):
 async def main():
     try:
         log.info("Запуск бота...")
-        
-        # Удаляем вебхук перед запуском polling (исправление ошибки Conflict)
         await bot.delete_webhook(drop_pending_updates=True)
-        
         await dp.start_polling(bot, skip_updates=True)
     finally:
         await bot.session.close()
